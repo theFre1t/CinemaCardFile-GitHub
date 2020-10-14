@@ -1,7 +1,39 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@using CinemaCardFile.Models
+@model IndexViewModel
+@{
+    ViewData["Title"] = "Каталог фильмов";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome to CinemaLib</h1>
 </div>
+<table class="table">
+    <tr><td>Название</td><td>Год</td>><td>Режиссер</td>><td>Выложил на сайт</td></tr>
+    @foreach (var item in Model.films)
+    {
+        <tr>
+            <td><a asp-route-id="@item.Id" asp-action="ViewFilm" asp-controller="Home">@item.Name</a></td>
+            <td>@item.Year</td>
+            <td>@item.Producer</td>
+            <td>@item.Username</td>
+        </tr>
+    }
+</table>
+@if (Model.pageViewModel.backPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.pageViewModel.currPage - 1)"
+       class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.pageViewModel.nextPage)
+{
+    <a asp-action="Index"
+       asp-route-page="@(Model.pageViewModel.currPage + 1)"
+       class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}

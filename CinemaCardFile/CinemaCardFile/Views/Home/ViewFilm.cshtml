@@ -1,0 +1,12 @@
+﻿@model Film
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<tr>
+    <td>@Model.Name</td>
+    <td>@Model.Year</td>
+    <td>@Model.Producer</td>
+    <td>@Model.Username</td>
+</tr>
+<a asp-action="EditFilm" asp-controller="Home" asp-route-id="@Model.Id">Редактировать</a>
