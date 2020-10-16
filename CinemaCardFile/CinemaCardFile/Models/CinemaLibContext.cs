@@ -38,8 +38,6 @@ namespace CinemaCardFile
                     .HasColumnName("name")
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Poster).HasColumnName("poster");
-
                 entity.Property(e => e.Producer)
                     .HasColumnName("producer")
                     .HasMaxLength(250);
@@ -51,6 +49,8 @@ namespace CinemaCardFile
                 entity.Property(e => e.Year)
                     .HasColumnName("year")
                     .HasMaxLength(4);
+
+                entity.Property(e => e.Poster).HasColumnName("poster");
             });
 
             OnModelCreatingPartial(modelBuilder);

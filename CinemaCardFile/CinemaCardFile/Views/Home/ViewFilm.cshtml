@@ -3,10 +3,33 @@
     ViewData["Title"] = @Model.Name;
 }
 
-<tr>
-    <td>@Model.Name</td>
-    <td>@Model.Year</td>
-    <td>@Model.Producer</td>
-    <td>@Model.Username</td>
-</tr>
-<a asp-action="EditFilm" asp-controller="Home" asp-route-id="@Model.Id">Редактировать</a>
+<div style='width:auto; height:770px;' class="card row">
+    @if (Model.Poster != null)
+    {
+        <img style='width:529px; height:768px;' class="" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Poster))" />
+    }
+    else
+    {
+        <img style='width:529px; height:768px;' class="" src="~/res/noImage.png" />
+    }
+    <div class="col-md-6 my-3 text-right">
+        <h1>@Model.Name</h1>
+        <div>
+            <p><strong>Год выпуска</strong></p>
+            <p class="text-capitalize">@Model.Year</p>
+        </div>
+        <div>
+            <p><strong>Режиссер</strong></p>
+            <p class="text-capitalize">@Model.Producer</p>
+        </div>
+        <div>
+            <p><strong>Описание</strong></p>
+            <p class="text-capitalize">@Model.Descrpion</p>
+        </div>
+        <div class="text-right mt-5">
+            <p class="lead">Выложил: @Model.Username</p>
+        </div>
+        <a asp-action="EditFilm" asp-route-id="@Model.Id" class="btn btn-outline-primary">Редактировать</a>
+    </div>
+</div>
+

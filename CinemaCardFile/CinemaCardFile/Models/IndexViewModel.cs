@@ -8,6 +8,6 @@ namespace CinemaCardFile.Models
     public class IndexViewModel
     {
         public IEnumerable<Film> films { get; set; }
-        public PageViewModel pageViewModel { get; set; }
+        public PaginationModel pageViewModel { get; set; }
     }
 }

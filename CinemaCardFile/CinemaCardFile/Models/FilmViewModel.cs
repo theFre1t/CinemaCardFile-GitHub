@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace CinemaCardFile
 {
-    public partial class Film
+    public class FilmViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -11,6 +10,6 @@ namespace CinemaCardFile
         public string Year { get; set; }
         public string Producer { get; set; }
         public string Username { get; set; }
-        public byte[] Poster { get; set; }
+        public IFormFile Poster { get; set; }
     }
 }

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace CinemaCardFile.Models
 {
-    public class PageViewModel
+    public class PaginationModel
     {
         public int currPage { get; private set; }
         public int maxPages { get; private set; }
 
-        public PageViewModel(int count, int currPage, int sizePage)
+        public PaginationModel(int count, int currPage, int sizePage)
         {
             this.currPage = currPage;
             maxPages = count / sizePage;
@@ -20,7 +20,7 @@ namespace CinemaCardFile.Models
             }
         }
 
-        public bool backPage
+        public bool GoToFirstPage
         {
             get
             {
@@ -28,7 +28,7 @@ namespace CinemaCardFile.Models
             }
         }
 
-        public bool nextPage
+        public bool GoToLastPage
         {
             get
             {

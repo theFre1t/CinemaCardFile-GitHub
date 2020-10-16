@@ -23,12 +23,12 @@ namespace CinemaCardFile.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            int sizePage = 15;
-            List<Film> films = await db.Film.ToListAsync();
+            int sizePage = 10;
+            IEnumerable<Film> films = await db.Film.ToListAsync();
             var count = films.Count();
             var items = films.Skip((page - 1) * sizePage).Take(sizePage).ToList();
 
-            PageViewModel pageViewModel = new PageViewModel(count, page, sizePage);
+            PaginationModel pageViewModel = new PaginationModel(count, page, sizePage);
             IndexViewModel indexViewModel = new IndexViewModel
             {
                 films = items,
@@ -41,8 +41,8 @@ namespace CinemaCardFile.Controllers
         {
             if (id != null)
             {
-                Film film = await db.Film.FirstOrDefaultAsync(p=>p.Id==id);
-                if(film != null)
+                Film film = await db.Film.FirstOrDefaultAsync(p => p.Id == id);
+                if (film != null)
                 {
                     return View(film);
                 }
@@ -50,6 +50,37 @@ namespace CinemaCardFile.Controllers
             return NotFound();
         }
 
+        public IActionResult AddFilm()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddFilm(FilmViewModel filmVM)
+        {
+            Film film = new Film
+            {
+                Id = filmVM.Id,
+                Name = filmVM.Name,
+                Descrpion = filmVM.Descrpion,
+                Year = filmVM.Year,
+                Producer = filmVM.Producer,
+                Username = filmVM.Username
+            };
+            if (filmVM.Poster != null)
+            {
+                byte[] imageData = null;
+                using (var binaryReader = new System.IO.BinaryReader(filmVM.Poster.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)filmVM.Poster.Length);
+                }
+                film.Poster = imageData;
+            }
+            db.Film.Add(film);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        
         public async Task<IActionResult> EditFilm(int? id)
         {
             if (id != null)
@@ -64,25 +95,31 @@ namespace CinemaCardFile.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditFilm(Film film)
+        public async Task<IActionResult> EditFilm(FilmViewModel filmVM)
         {
+            Film film = new Film
+            {
+                Id = filmVM.Id,
+                Name = filmVM.Name,
+                Descrpion = filmVM.Descrpion,
+                Year = filmVM.Year,
+                Producer = filmVM.Producer,
+                Username = filmVM.Username
+            };
+            if (filmVM.Poster != null)
+            {
+                byte[] imageData = null;
+                using (var binaryReader = new System.IO.BinaryReader(filmVM.Poster.OpenReadStream()))
+                {
+                    imageData = binaryReader.ReadBytes((int)filmVM.Poster.Length);
+                }
+                film.Poster = imageData;
+            }
             db.Film.Update(film);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        public IActionResult AddFilm()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddFilm(Film film)
-        {
-            db.Film.Add(film);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
         public IActionResult Privacy()
         {
             return View();
