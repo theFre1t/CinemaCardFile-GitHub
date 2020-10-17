@@ -23,16 +23,16 @@ namespace CinemaCardFile.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            int sizePage = 10;
+            int sizePage = 10; //задаем количество элементов на странице
             IEnumerable<Film> films = await db.Film.ToListAsync();
             var count = films.Count();
-            var items = films.Skip((page - 1) * sizePage).Take(sizePage).ToList();
+            var items = films.Skip((page - 1) * sizePage).Take(sizePage).ToList(); // пропускаем элементы и берем след. заданное количество
 
-            PaginationModel pageViewModel = new PaginationModel(count, page, sizePage);
+            PaginationModel paginModel = new PaginationModel(count, page, sizePage);
             IndexViewModel indexViewModel = new IndexViewModel
             {
                 films = items,
-                pageViewModel = pageViewModel
+                pageViewModel = paginModel
             };
             return View(indexViewModel);
         }
@@ -57,16 +57,15 @@ namespace CinemaCardFile.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AddFilm(FilmViewModel filmVM)
-        {
-            Film film = new Film
-            {
-                Id = filmVM.Id,
+        {             
+            Film film = new Film{               
                 Name = filmVM.Name,
                 Descrpion = filmVM.Descrpion,
                 Year = filmVM.Year,
                 Producer = filmVM.Producer,
                 Username = filmVM.Username
             };
+            //Записываем полученный файл в массив байтов
             if (filmVM.Poster != null)
             {
                 byte[] imageData = null;
@@ -104,8 +103,10 @@ namespace CinemaCardFile.Controllers
                 Descrpion = filmVM.Descrpion,
                 Year = filmVM.Year,
                 Producer = filmVM.Producer,
-                Username = filmVM.Username
+                Username = filmVM.Username,
+                Poster = db.Film.AsNoTracking().FirstOrDefault(p => p.Id == filmVM.Id).Poster
             };
+            //Записываем полученный файл в массив байтов
             if (filmVM.Poster != null)
             {
                 byte[] imageData = null;
